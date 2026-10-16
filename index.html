@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekonomisk Jämförelsemodell - Länsförsäkringar</title>
+    <style>
+        :root {
+            --lf-blue: #002f6c;
+            --lf-light-blue: #f0f4f8;
+            --lf-accent: #0056b3;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #cbd5e1;
+            --input-bg: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--lf-blue);
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn-share {
+            background-color: var(--lf-blue);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-share:hover {
+            background-color: var(--lf-accent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .option-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            color: var(--lf-blue);
+            border-bottom: 3px solid var(--lf-blue);
+        }
+
+        .category-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--lf-blue);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .form-row.triple {
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: #475569;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            background-color: var(--input-bg);
+            border-radius: 4px;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid var(--lf-blue);
+            background-color: #fff;
+        }
+
+        .btn-add {
+            background: var(--lf-light-blue);
+            color: var(--lf-blue);
+            border: 1px solid var(--lf-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background: var(--lf-blue);
+            color: white;
+        }
+
+        .btn-del {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0 0.25rem;
+            align-self: center;
+            margin-top: 5px;
+        }
+
+        .sub-result {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--lf-blue);
+            text-align: right;
+            margin-top: 0.5rem;
+            background: var(--lf-light-blue);
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            float: right;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Sammanställning */
+        .summary-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+
+        .summary-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--lf-blue);
+        }
+
+        .visual-bar-container {
+            margin: 2rem 0;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--lf-blue);
+        }
+
+        .bar-bg {
+            background: #e2e8f0;
+            height: 30px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 1.25rem;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease-out, background-color 0.3s;
+        }
+
+        .result-box {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 1.25rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+        }
+
+        .winner {
+            background-color: #dcfce7;
+            color: #14532d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .extra-benefits-box {
+            background-color: var(--lf-light-blue);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .extra-benefits-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--lf-blue);
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.25rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .benefit-item:last-child {
+            border-bottom: none;
+        }
+
+        .benefit-name {
+            font-weight: 500;
+        }
+
+        .benefit-value {
+            font-weight: 700;
+            color: var(--success);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Ekonomisk Jämförelsemodell</h1>
+        <p>Se hur mycket du sparar genom att samla dina tjänster.</p>
+    </header>
+
+    <div class="share-container">
+        <button class="btn-share" onclick="copyShareLink()">🔗 Kopiera delningslänk</button>
+    </div>
+
+    <div class="grid">
+        <!-- HOS OSS -->
+        <div class="option-card" id="opt1">
+            <div class="option-title">Hos oss</div>
+            
+            <!-- Bank -->
+            <div class="category-box clearfix">
+                <div class="category-title">🏦 Bank</div>
+                <div class="form-row">
+                    <div>
+                        <label>Summa lån (kr)</label>
+                        <input type="number" class="bank-loan" value="3000000" oninput="calculate()">
+                    </div>
+                    <div>
+                        <label>Räntesats (%)</label>
+                        <input type="number" class="bank-rate" step="0.01" value="2.70" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="sub-result">Månadskostnad: <span class="res-bank">0</span> kr</div>
+            </div>
+
+            <!-- Försäkring -->
+            <div class="category-box clearfix">
+                <div class="category-title">
+                    <span>🛡️ Försäkring</span>
+                    <button class="btn-add" onclick="addInsuranceRow('opt1')">+</button>
+                </div>
+                <div class="insurance-list">
+                    <div class="form-row triple">
+                        <div>
+                            <label>Försäkringens namn</label>
+                            <input type="text" class="ins-name" value="Hemförsäkring" readonly>
+                        </div>
+                        <div>
+                            <label>Pris (kr/år)</label>
+                            <input type="number" class="ins-cost" value="4000" oninput="calculate()">
+                        </div>
+                        <div>
+                            <label>Rabatt (%)</label>
+                            <input type="number" class="ins-disc" value="20" oninput="calculate()">
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
